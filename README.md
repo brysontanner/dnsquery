@@ -11,6 +11,7 @@ This program relies upon 1 outside library: *dnspython*. This can be installed b
 ## Notes and Warnings
 
 * This program requires Python 3 and does not work in Python 2.7.
+* To output to file, pipe the output to file using the proper commands for your system.
 * If conducting reverse DNS lookups (PTR records), do not provide the IP addresses in reverse pointer notation.
   * For example, to query for the domain name associated with 8.8.8.8, put ```8.8.8.8``` in the file. 
   * Do **not** put ```8.8.8.8.in-addr.arpa``` in the file! The program automatically converts IP addresses into reverse pointer notation.
