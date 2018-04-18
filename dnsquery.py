@@ -5,20 +5,23 @@ import argparse
 import ipaddress
 from sys import exit
 
-# Setup DNS resolver
-resolver = dns.resolver.Resolver(configure=False)
-resolver.nameservers = ['9.9.9.9', '8.8.8.8']
-
 # Setup parser
 parser = argparse.ArgumentParser(description='Bulk DNS Resolver (PTR, A, and AAAA)')
 parser.add_argument('--input', '-i', required=True, help='newline delimited file containing IP addresses or hostnames to query')
 parser.add_argument('--type', '-t', required=True, choices=['A', 'AAAA', 'PTR'], help='type of query: PTR, A, or AAAA')
+parser.add_argument('--primary', default='9.9.9.9', help='primary DNS server')
+parser.add_argument('--secondary', default='8.8.8.8', help='secondary DNS server')
 
 # Parse arguments and store to variables for later use
 arguments = parser.parse_args()
 
 inputFile = arguments.input
 queryType = arguments.type
+dnsServers = [arguments.primary, arguments.secondary]
+
+# Setup DNS resolver
+resolver = dns.resolver.Resolver(configure=False)
+resolver.nameservers = dnsServers
 
 # Open file for reading
 try:
@@ -29,6 +32,9 @@ except FileNotFoundError:
 except Exception as error:
     print('An unknown error has occurred:\n {}'.format(error))
     exit()
+
+# Print header
+print('DNS Query Results')
 
 # Process queries and print to screen
 for line in queries:
